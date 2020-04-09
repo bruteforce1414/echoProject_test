@@ -10,15 +10,11 @@ func main() {
 	e := echo.New()
 	e.GET("/api/user/:id", getUserPath)
 
+	//http://localhost:1323/api/user?name=name1&password=password&age=17
+	e.GET("/api/user", getUserQuery)
 
-/*	e.POST("/users", saveUser)
-	e.GET("/show", show)
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
-	e.POST("/save", save)
+	e.POST("/api/user", postUserJson)
 
- */
 	e.Logger.Fatal(e.Start(":1323"))
 }
 
@@ -30,16 +26,21 @@ func getUserPath(c echo.Context) error {
 }
 
 //e.GET("/show", show)
-func show(c echo.Context) error {
+func getUserQuery(c echo.Context) error {
 	// Get team and member from the query string
-	team := c.QueryParam("team")
-	member := c.QueryParam("member")
-	return c.String(http.StatusOK, "team:" + team + ", member:" + member)
+	name := c.QueryParam("name")
+	password := c.QueryParam("password")
+	age := c.QueryParam("age")
+	return c.String(http.StatusOK, "name:"+name+"\n"+"password:"+password+"\n"+"age"+age)
 }
 
-func save(c echo.Context) error {
+//curl -F "name=Joe Smith" -F "password=password"  -F "age=17" http://localhost:1323/api/user
+// => name:Joe Smith, password:password, age=17
+func postUserJson(c echo.Context) error {
 	// Get name and email
 	name := c.FormValue("name")
-	email := c.FormValue("email")
-	return c.String(http.StatusOK, "name:" + name + ", email:" + email)
+	password := c.FormValue("password")
+	age := c.FormValue("age")
+
+	return c.String(http.StatusOK, "name:"+name+"\n"+"password:"+password+"\n"+"age"+age)
 }
