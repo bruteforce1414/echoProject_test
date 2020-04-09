@@ -1,0 +1,5 @@
+.idea/
+*.so
+vendor/
+Gopkg.lock
+norictl
